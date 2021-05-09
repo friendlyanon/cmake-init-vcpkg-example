@@ -1,0 +1,22 @@
+name: Continuous Integration
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Install vcpkg
+      uses: lukka/run-vcpkg@v7
+      with: 
+        setupOnly: true
+        vcpkgGitCommitId: 86d689b2305d8c453418cae1ed2009718d05cddf
+
+    - name: Configure
+      run: cmake --preset=ci-ubuntu
+
+    - name: Run
+      run: cmake --build build -j 2 -t run_exe

@@ -1,0 +1,8 @@
+{
+  "name": "vcpkg-example",
+  "version-semver": "0.1.0",
+  "dependencies": [
+    "cmake-init-header-only",
+    "cmake-init-shared-static"
+  ]
+}
