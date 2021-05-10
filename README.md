@@ -18,5 +18,7 @@ Every other change in the repository was made just to make this repository more
 focused on showing how to integrate with vcpkg, like removing unused presets
 and the tests, and trimming the CI workflow yaml.
 
+![GIF of configuring, building and running this project](assets/example.gif)
+
 [1]: https://github.com/microsoft/vcpkg
 [2]: https://github.com/friendlyanon/cmake-init
