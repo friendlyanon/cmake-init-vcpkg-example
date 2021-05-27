@@ -15,6 +15,13 @@
       }
     },
     {
+      "name": "dev-mode",
+      "hidden": true,
+      "cacheVariables": {
+        "vcpkg-example_DEVELOPER_MODE": "ON"
+      }
+    },
+    {
       "name": "flags-unix",
       "hidden": true,
       "cacheVariables": {
@@ -30,29 +37,29 @@
       }
     },
     {
-      "name": "ci-build",
-      "binaryDir": "${sourceDir}/build",
-      "hidden": true
-    },
-    {
       "name": "ci-unix",
       "generator": "Unix Makefiles",
       "hidden": true,
-      "inherits": ["flags-unix", "ci-build"],
+      "inherits": "flags-unix",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
       "name": "ci-win64",
-      "inherits": ["flags-windows", "ci-build"],
+      "inherits": "flags-windows",
       "generator": "Visual Studio 16 2019",
       "architecture": "x64",
       "hidden": true
     },
     {
+      "name": "ci-build",
+      "binaryDir": "${sourceDir}/build",
+      "hidden": true
+    },
+    {
       "name": "ci-ubuntu",
-      "inherits": ["ci-unix", "vcpkg"]
+      "inherits": ["ci-build", "ci-unix", "dev-mode", "vcpkg"]
     }
   ]
 }

@@ -25,7 +25,7 @@ mark_as_advanced(vcpkg-example_INSTALL_CMAKEDIR)
 
 install(
     FILES
-    "${PROJECT_SOURCE_DIR}/cmake/vcpkg-exampleConfig.cmake"
+    cmake/vcpkg-exampleConfig.cmake
     "${PROJECT_BINARY_DIR}/vcpkg-exampleConfigVersion.cmake"
     DESTINATION "${vcpkg-example_INSTALL_CMAKEDIR}"
     COMPONENT vcpkg-example_Development
