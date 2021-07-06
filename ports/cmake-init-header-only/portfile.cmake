@@ -4,7 +4,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO friendlyanon/cmake-init-header-only
     REF master
-    SHA512 0cd707414775053a153e862df57fadf5e0b1183ce1a0f79ef104f08eaac2a94f67e7b142bdeca95c8f8ac7bb1eaeab6222c6b2e7c96c240f5fe5793f7a0222b9
+    SHA512 8f3b6c8cb1073a8b71561336eddc487bec40777b426bea8adbc6cb9b7040361587d2bf05e40ba3b07c7c8a9bf4a1f5015ad5b468a21596be981e50952344902b
     HEAD_REF master
 )
 

@@ -3,7 +3,7 @@
 
 #include <lib.h>
 
-#include <shared/shared.h>
+#include <shared/shared.hpp>
 
 int main() {
   library lib;
