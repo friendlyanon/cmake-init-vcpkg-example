@@ -15,14 +15,10 @@ include(cmake/variables.cmake)
 
 # ---- Declare library ----
 
-add_library(
-    vcpkg-example_lib OBJECT
-    source/lib.cpp
-)
+add_library(vcpkg-example_lib OBJECT source/lib.cpp)
 
 target_include_directories(
-    vcpkg-example_lib
-    ${vcpkg-example_warning_guard}
+    vcpkg-example_lib ${vcpkg-example_warning_guard}
     PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
@@ -57,7 +53,9 @@ target_link_libraries(
 
 # ---- Install rules ----
 
-include(cmake/install-rules.cmake)
+if(NOT CMAKE_SKIP_INSTALL_RULES)
+  include(cmake/install-rules.cmake)
+endif()
 
 # ---- Developer mode ----
 

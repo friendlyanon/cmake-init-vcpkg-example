@@ -5,6 +5,9 @@ endif()
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
+# find_package(<package>) call for consumers to find this project
+set(package vcpkg-example)
+
 install(
     TARGETS vcpkg-example_vcpkg-example
     EXPORT vcpkg-exampleTargets
@@ -24,9 +27,14 @@ set(
 mark_as_advanced(vcpkg-example_INSTALL_CMAKEDIR)
 
 install(
-    FILES
-    cmake/vcpkg-exampleConfig.cmake
-    "${PROJECT_BINARY_DIR}/vcpkg-exampleConfigVersion.cmake"
+    FILES cmake/install-config.cmake
+    DESTINATION "${vcpkg-example_INSTALL_CMAKEDIR}"
+    RENAME "${package}Config.cmake"
+    COMPONENT vcpkg-example_Development
+)
+
+install(
+    FILES "${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake"
     DESTINATION "${vcpkg-example_INSTALL_CMAKEDIR}"
     COMPONENT vcpkg-example_Development
 )
