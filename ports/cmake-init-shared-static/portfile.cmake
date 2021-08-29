@@ -1,18 +1,14 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO friendlyanon/cmake-init-shared-static
-    REF master
-    SHA512 4691caa7b1c8c152df19b03aaaf6e4056d1b137eca30aeca18890b5ad1c93c117a07be3e99fd300d61bab97b06987549fd1e0c0c62d0379432d16d64c621066a
+    REF v0.20.6
+    SHA512 45fd9a326677fe490e054941bdf7f0cc95d32b6c4679324c47717530f9547494ee1b5993a8b68fdabfa5892d44cf40741913d314ed5704442818a0dd92c4081d
     HEAD_REF master
 )
 
 set(name shared)
 
-vcpkg_cmake_configure(
-    SOURCE_PATH "${SOURCE_PATH}"
-    OPTIONS
-    "-D${name}_INSTALL_CMAKEDIR=share/${name}"
-)
+vcpkg_cmake_configure(SOURCE_PATH "${SOURCE_PATH}")
 
 vcpkg_cmake_install()
 

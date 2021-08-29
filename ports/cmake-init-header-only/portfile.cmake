@@ -3,18 +3,14 @@ set(VCPKG_BUILD_TYPE release)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO friendlyanon/cmake-init-header-only
-    REF master
-    SHA512 8f3b6c8cb1073a8b71561336eddc487bec40777b426bea8adbc6cb9b7040361587d2bf05e40ba3b07c7c8a9bf4a1f5015ad5b468a21596be981e50952344902b
+    REF v0.20.6
+    SHA512 a1a7f9accfbf78e49e65930b0c231bdd4876993509b90b9b6520fc314cd3b7593ddaa2586566f9d41e5da326f91bc04eeb86ac685c79a33c4f2bec9453334b78
     HEAD_REF master
 )
 
 set(name headeronly)
 
-vcpkg_cmake_configure(
-    SOURCE_PATH "${SOURCE_PATH}"
-    OPTIONS
-    "-D${name}_INSTALL_CMAKEDIR=share/${name}"
-)
+vcpkg_cmake_configure(SOURCE_PATH "${SOURCE_PATH}")
 
 vcpkg_cmake_install()
 
