@@ -1,14 +1,12 @@
 #include <iostream>
 #include <string>
 
-#include <lib.h>
+#include "lib.hpp"
 
-#include <shared/shared.hpp>
-
-int main() {
-  library lib;
-  exported_class e;
-  std::cout << "Name from header-only dependency: " << lib.name << '\n';
-  std::cout << "Name from shared library dependency: " << e.name() << '\n';
+auto main() -> int
+{
+  auto const lib = library {};
+  auto const message = "Hello from " + lib.name + "!";
+  std::cout << message << '\n';
   return 0;
 }

@@ -1,39 +1,19 @@
 # Building with CMake
 
-## vcpkg dependencies
+## Dependencies
 
-This project contains vcpkg port files to install some dependencies, but this
-is optional. You may also install those dependencies manually or using any
-other package manager, however the port files are already provided and make
-automatic dependency management easier.
-
-If you have vcpkg set up, then you have to provide some extra flags to the
-configure command, which differs only in how you provide the paths depending on
-your OS:
-
-```batch
-rem Windows
--D "CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake"
--D "VCPKG_OVERLAY_PORTS=%cd%/ports"
-```
-
-```sh
-# Unix based (Linux, macOS)
--D "CMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
--D "VCPKG_OVERLAY_PORTS=$PWD/ports"
-```
+For a list of dependencies, please refer to [vcpkg.json](vcpkg.json).
 
 ## Build
 
-Besides the ones for vcpkg dependencies (if you choose to provide them to the
-project using vcpkg), this project doesn't require any special command-line
-flags to build to keep things simple.
+This project doesn't require any special command-line flags to build to keep
+things simple.
 
 Here are the steps for building in release mode with a single-configuration
 generator, like the Unix Makefiles one:
 
 ```sh
-cmake -S . -B build -D CMAKE_BUILD_TYPE=Release # vcpkg flags
+cmake -S . -B build -D CMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
@@ -41,9 +21,21 @@ Here are the steps for building in release mode with a multi-configuration
 generator, like the Visual Studio ones:
 
 ```sh
-cmake -S . -B build # vcpkg flags
+cmake -S . -B build
 cmake --build build --config Release
 ```
+
+### Building with MSVC
+
+Note that MSVC by default is not standards compliant and you need to pass some
+flags to make it behave properly. See the `flags-windows` preset in the
+[CMakePresets.json](CMakePresets.json) file for the flags and with what
+variable to provide them to CMake during configuration.
+
+### Building on Apple Silicon
+
+CMake supports building on Apple Silicon properly since 3.20.1. Make sure you
+have the [latest version][1] installed.
 
 ## Install
 
@@ -52,7 +44,7 @@ things simple. As a prerequisite, the project has to be built with the above
 commands already.
 
 The below commands require at least CMake 3.15 to run, because that is the
-version in which [Install a Project][1] was added.
+version in which [Install a Project][2] was added.
 
 Here is the command for installing the release mode artifacts with a
 single-configuration generator, like the Unix Makefiles one:
@@ -68,4 +60,5 @@ multi-configuration generator, like the Visual Studio ones:
 cmake --install build --config Release
 ```
 
-[1]: https://cmake.org/cmake/help/latest/manual/cmake.1.html#install-a-project
+[1]: https://cmake.org/download/
+[2]: https://cmake.org/cmake/help/latest/manual/cmake.1.html#install-a-project

@@ -1,6 +1,8 @@
-#include <lib.h>
+#include "lib.hpp"
 
-#include <headeronly/headeronly.hpp>
+#include <fmt/core.h>
 
-library::library() : name(::name())
-{}
+library::library()
+    : name {fmt::format("{}", "vcpkg-example")}
+{
+}

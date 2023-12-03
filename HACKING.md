@@ -31,7 +31,7 @@ the project:
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "cmakeMinimumRequired": {
     "major": 3,
     "minor": 14,
@@ -41,45 +41,120 @@ the project:
     {
       "name": "dev",
       "binaryDir": "${sourceDir}/build/dev",
-      "inherits": ["dev-mode", "ci-<os>", "vcpkg"]
+      "inherits": ["dev-mode", "vcpkg", "ci-<os>"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "configuration": "Debug"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
     }
   ]
 }
 ```
 
 You should replace `<os>` in your newly created presets file with the name of
-the operating system you have, which may be `win64` or `unix`. You can see what
-these correspond to in the [`CMakePresets.json`](CMakePresets.json) file.
+the operating system you have, which may be `win64`, `linux` or `darwin`. You
+can see what these correspond to in the
+[`CMakePresets.json`](CMakePresets.json) file.
 
 `CMakeUserPresets.json` is also the perfect place in which you can put all
 sorts of things that you would otherwise want to pass to the configure command
 in the terminal.
 
-### Configure, build and test
+> **Note**
+> Some editors are pretty greedy with how they open projects with presets.
+> Some just randomly pick a preset and start configuring without your consent,
+> which can be confusing. Make sure that your editor configures when you
+> actually want it to, for example in CLion you have to make sure only the
+> `dev-dev preset` has `Enable profile` ticked in
+> `File > Settings... > Build, Execution, Deployment > CMake` and in Visual
+> Studio you have to set the option `Never run configure step automatically`
+> in `Tools > Options > CMake` **prior to opening the project**, after which
+> you can manually configure using `Project > Configure Cache`.
 
-To build the project as a developer, please make sure you have [vcpkg][3]
-installed and properly set up at least with the `VCPKG_ROOT` env var pointing
-to the right place, because some dependencies are provided with ports in the
-project.
+### Dependency manager
+
+The above preset will make use of the [vcpkg][vcpkg] dependency manager. After
+installing it, make sure the `VCPKG_ROOT` environment variable is pointing at
+the directory where the vcpkg executable is. On Windows, you might also want
+to inherit from the `vcpkg-win64-static` preset, which will make vcpkg install
+the dependencies as static libraries. This is only necessary if you don't want
+to setup `PATH` to run tests.
+
+[vcpkg]: https://github.com/microsoft/vcpkg
+
+### Configure, build and test
 
 If you followed the above instructions, then you can configure, build and test
 the project respectively with the following commands from the project root on
-Windows:
+any operating system with any build system:
 
 ```sh
 cmake --preset=dev
-cmake --build build/dev --config Release
-cd build/dev && ctest -C Release
+cmake --build --preset=dev
+ctest --preset=dev
 ```
 
-And here is the same on a Unix based system (Linux, macOS):
+If you are using a compatible editor (e.g. VSCode) or IDE (e.g. CLion, VS), you
+will also be able to select the above created user presets for automatic
+integration.
 
-```sh
-cmake --preset=dev
-cmake --build build/dev
-cd build/dev && ctest
-```
+Please note that both the build and test commands accept a `-j` flag to specify
+the number of jobs to use, which should ideally be specified to the number of
+threads your CPU has. You may also want to add that to your preset using the
+`jobs` property, see the [presets documentation][1] for more details.
+
+### Developer mode targets
+
+These are targets you may invoke using the build command from above, with an
+additional `-t <target>` flag:
+
+#### `coverage`
+
+Available if `ENABLE_COVERAGE` is enabled. This target processes the output of
+the previously run tests when built with coverage configuration. The commands
+this target runs can be found in the `COVERAGE_TRACE_COMMAND` and
+`COVERAGE_HTML_COMMAND` cache variables. The trace command produces an info
+file by default, which can be submitted to services with CI integration. The
+HTML command uses the trace command's output to generate an HTML document to
+`<binary-dir>/coverage_html` by default.
+
+#### `docs`
+
+Available if `BUILD_MCSS_DOCS` is enabled. Builds to documentation using
+Doxygen and m.css. The output will go to `<binary-dir>/docs` by default
+(customizable using `DOXYGEN_OUTPUT_DIRECTORY`).
+
+#### `format-check` and `format-fix`
+
+These targets run the clang-format tool on the codebase to check errors and to
+fix them respectively. Customization available using the `FORMAT_PATTERNS` and
+`FORMAT_COMMAND` cache variables.
+
+#### `run-exe`
+
+Runs the executable target `vcpkg-example_exe`.
+
+#### `spell-check` and `spell-fix`
+
+These targets run the codespell tool on the codebase to check errors and to fix
+them respectively. Customization available using the `SPELL_COMMAND` cache
+variable.
 
 [1]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
 [2]: https://cmake.org/download/
-[3]: https://github.com/microsoft/vcpkg

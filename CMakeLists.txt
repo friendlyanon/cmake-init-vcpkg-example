@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 
-include(cmake/in-source-guard.cmake)
+include(cmake/prelude.cmake)
 
 project(
     vcpkg-example
     VERSION 0.1.0
-    DESCRIPTION "cmake-init generated executable project with vcpkg integration"
-    HOMEPAGE_URL "https://github.com/friendlyanon/cmake-init-vcpkg-example"
+    DESCRIPTION "Short description"
+    HOMEPAGE_URL "https://example.com/"
     LANGUAGES CXX
 )
 
@@ -15,41 +15,32 @@ include(cmake/variables.cmake)
 
 # ---- Declare library ----
 
-add_library(vcpkg-example_lib OBJECT source/lib.cpp)
+add_library(
+    vcpkg-example_lib OBJECT
+    source/lib.cpp
+)
 
 target_include_directories(
-    vcpkg-example_lib ${vcpkg-example_warning_guard}
+    vcpkg-example_lib ${warning_guard}
     PUBLIC
-    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
 )
 
 target_compile_features(vcpkg-example_lib PUBLIC cxx_std_17)
 
-find_package(headeronly REQUIRED)
-
-target_link_libraries(vcpkg-example_lib PRIVATE headeronly::headeronly)
+find_package(fmt REQUIRED)
+target_link_libraries(vcpkg-example_lib PRIVATE fmt::fmt)
 
 # ---- Declare executable ----
 
-add_executable(vcpkg-example_vcpkg-example source/main.cpp)
-add_executable(vcpkg-example::vcpkg-example ALIAS vcpkg-example_vcpkg-example)
+add_executable(vcpkg-example_exe source/main.cpp)
+add_executable(vcpkg-example::exe ALIAS vcpkg-example_exe)
 
-set_target_properties(
-    vcpkg-example_vcpkg-example PROPERTIES
-    OUTPUT_NAME vcpkg-example
-    EXPORT_NAME vcpkg-example
-)
+set_property(TARGET vcpkg-example_exe PROPERTY OUTPUT_NAME vcpkg-example)
 
-target_compile_features(vcpkg-example_vcpkg-example PRIVATE cxx_std_17)
+target_compile_features(vcpkg-example_exe PRIVATE cxx_std_17)
 
-find_package(shared REQUIRED)
-
-target_link_libraries(
-    vcpkg-example_vcpkg-example
-    PRIVATE
-    vcpkg-example_lib
-    shared::shared
-)
+target_link_libraries(vcpkg-example_exe PRIVATE vcpkg-example_lib)
 
 # ---- Install rules ----
 
@@ -68,8 +59,4 @@ elseif(NOT PROJECT_IS_TOP_LEVEL)
   )
 endif()
 
-add_custom_target(
-    run_exe
-    COMMAND "$<TARGET_FILE:vcpkg-example_vcpkg-example>"
-    VERBATIM
-)
+include(cmake/dev-mode.cmake)
