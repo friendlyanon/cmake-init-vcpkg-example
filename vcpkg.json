@@ -4,7 +4,7 @@
   "dependencies": [
     {
       "name": "fmt",
-      "version>=": "10.1.0"
+      "version>=": "10.2.1"
     }
   ],
   "default-features": [],
@@ -14,10 +14,10 @@
       "dependencies": [
         {
           "name": "catch2",
-          "version>=": "3.4.0"
+          "version>=": "3.5.2"
         }
       ]
     }
   },
-  "builtin-baseline": "16ee2ecb31788c336ace8bb14c21801efb6836e4"
+  "builtin-baseline": "72d66da23b4332533c82d797bf2f82b8d6d1bf8a"
 }
